@@ -9,7 +9,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { CoreCommonModule } from '@core/common.module';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { DashboardService } from './dashboard.service';
-import {VehiculeChantierModule} from '../projets/logistique/vehicule-chantier/vehicule-chantier.module';
+
 
 
 
@@ -37,7 +37,7 @@ const routes = [
         PerfectScrollbarModule,
         CoreCommonModule,
         NgApexchartsModule,
-        VehiculeChantierModule
+
     ],
     providers: [DashboardService],
     exports: []

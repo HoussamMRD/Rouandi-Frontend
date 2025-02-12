@@ -7,6 +7,7 @@ import {Role} from '../main/authentication/models/role';
 export const menu: CoreMenu[] = [
 
 
+/*
     {
         id: 'logistique',
         type: 'section',
@@ -175,6 +176,7 @@ export const menu: CoreMenu[] = [
             }
         ],
     },
+*/
     {
         id: 'srbo',
         type: 'section',

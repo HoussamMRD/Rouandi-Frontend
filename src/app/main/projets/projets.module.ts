@@ -20,15 +20,11 @@ const routes: Routes = [
     {
         path: 'users',
         loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
-        canActivate: [AuthGuard]
+        canActivate:[AuthGuard]
     },
 
 
-    {
-        path: 'logistique',
-        loadChildren: () => import('./logistique/logistique.module').then(m => m.LogistiqueModule),
-        canActivate: [AuthGuard]
-    },
+
     {
         path: 'srbo',
         loadChildren: () => import('./bo/sr-bo.module').then(m => m.SrBoModule),
