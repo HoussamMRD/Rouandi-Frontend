@@ -4,125 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9e1f07d8-5f97-4fce-93bb-6c685c3cf45b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/dashboard/dashboard-layout/dashboard-layout.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/main/dashboard/dashboard-layout/dashboard-layout.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/dashboard/dashboard.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/main/dashboard/dashboard.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/chauffeur/chauffeur-edit/chauffeur-edit.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/chauffeur/chauffeur-edit/chauffeur-edit.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/chauffeur/chauffeur-edit/chauffeur-edit.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/chauffeur/chauffeur-list/chauffeur-engin-list.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/chauffeur/chauffeur-list/chauffeur-engin-list.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/chauffeur/chauffeur-list/chauffeur-engin-list.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/chauffeur/chauffeur-view/chauffeur-view.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/chauffeur/chauffeur-view/chauffeur-view.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/chauffeur/chauffeur-view/chauffeur-view.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/chauffeur/chauffeur.module.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/chauffeur/chauffeur.service.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/chauffeur/new-chauffeur-sidebar/new-chauffeur-sidebar.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/chauffeur/new-chauffeur-sidebar/new-chauffeur-sidebar.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/chauffeur/new-chauffeur-sidebar/new-chauffeur-sidebar.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/engin-chantier.module.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/engin/add-engin/add-engin.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/engin/add-engin/add-engin.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/engin/add-engin/add-engin.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/engin/affectation-chauffeur-cout/affectation-chauffeur-cout.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/engin/affectation-chauffeur-cout/affectation-chauffeur-cout.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/engin/affectation-chauffeur-cout/affectation-chauffeur-cout.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/engin/engin-list/engin-list.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/engin/engin-list/engin-list.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/engin/engin-list/engin-list.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/models/EnginGpsLocation.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/models/EnginImputation.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/models/EnginRoute.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/models/dto/EnginGpsLocationDTO.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/models/dto/EnginImputationRequestDTO.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/models/dto/EnginImputationResponseDTO.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/models/dto/EnginRouteDTO.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/models/dto/TripImputationResponseDTO.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/mouvement-engin/engin-gps-location.service.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/mouvement-engin/engin-mouvement-list/engin-mouvement-list.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/mouvement-engin/engin-mouvement-list/engin-mouvement-list.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/mouvement-engin/engin-mouvement-list/engin-mouvement-list.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/mouvement-engin/mouvement-engin.service.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/recap-engin-imputation/recap-engin-imputation.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/recap-engin-imputation/recap-engin-imputation.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/recap-engin-imputation/recap-engin-imputation.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/engin-chantier/recap-engin-imputation/recap-engin-imputation.service.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/fournisseur.service.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/imputation.service.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/location-chantier/dto/update-location-invoce-dto.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/location-chantier/location-chantier.service.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/location-chantier/location-chantier/location-chantier.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/location-chantier/location-chantier/location-chantier.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/location-chantier/location-chantier/location-chantier.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/location-chantier/location.module.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/location-chantier/models/location-invoice.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/logistique.module.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/lot.service.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/models/affaire.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/models/chauffeur.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/models/client.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/models/fournisseur.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/models/lot.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/recap-chantier/recap-chantier.module.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/recap-chantier/recap-general.service.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/recap-chantier/recap-general/recap-general.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/recap-chantier/recap-general/recap-general.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/recap-chantier/recap-general/recap-general.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/subContractor.service.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/chauffeur/chauffeur-edit/chauffeur-edit.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/chauffeur/chauffeur-edit/chauffeur-edit.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/chauffeur/chauffeur-edit/chauffeur-edit.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/chauffeur/chauffeur-list/chauffeur-vh-list.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/chauffeur/chauffeur-list/chauffeur-vh-list.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/chauffeur/chauffeur-list/chauffeur-vh-list.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/chauffeur/chauffeur-view/chauffeur-view.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/chauffeur/chauffeur-view/chauffeur-view.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/chauffeur/chauffeur-view/chauffeur-view.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/chauffeur/chauffeur.module.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/chauffeur/chauffeur.service.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/chauffeur/new-chauffeur-sidebar/new-chauffeur-sidebar.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/chauffeur/new-chauffeur-sidebar/new-chauffeur-sidebar.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/chauffeur/new-chauffeur-sidebar/new-chauffeur-sidebar.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/dashboard-mouvement/dashboard-mouvement.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/dashboard-mouvement/dashboard-mouvement.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/dashboard-mouvement/dashboard-mouvement.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/models/DTO/AssociateFromToRequestDTO.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/models/DTO/AssociateRequestDTO.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/models/DTO/FromMouvementRequestDTO.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/models/DTO/FromMouvementResponseDTO.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/models/DTO/PerformanceOverTimeRequestDTO.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/models/DTO/TripImputationRequestDTO.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/models/DTO/TripImputationResponseDTO.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/models/DTO/UpdateFillingPercentageDTO.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/models/DTO/UpdateMouvementDTO.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/models/FromMouvement.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/models/TripImputation.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/models/vehicule-gps-location.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/models/vehicule-mouvement.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/models/vehicule-route.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/mouvement-vh/vehicule-mouvement-list/vehicule-mouvement-list.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/mouvement-vh/vehicule-mouvement-list/vehicule-mouvement-list.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/mouvement-vh/vehicule-mouvement-list/vehicule-mouvement-list.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/mouvement-vh/vehicule-route.service.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/recap-imputation/recap-imputation.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/recap-imputation/recap-imputation.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/recap-imputation/recap-imputation.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/recap-imputation/recap-imputation.service.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/vehicule-chantier.module.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/vehicule/affectation-affaire-chauffeur/affectation-affaire-chauffeur.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/vehicule/affectation-affaire-chauffeur/affectation-affaire-chauffeur.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/vehicule/affectation-affaire-chauffeur/affectation-affaire-chauffeur.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/vehicule/kpi-vehicule.service.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/vehicule/vehicule-gps-location.service.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/vehicule/vehicule-list/vehicule-list.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/vehicule/vehicule-list/vehicule-list.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/logistique/vehicule-chantier/vehicule/vehicule-list/vehicule-list.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/projets/projets.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/main/projets/projets.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/menu/menu.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/menu/menu.ts" afterDir="false" />
-    </list>
+    <list default="true" id="9e1f07d8-5f97-4fce-93bb-6c685c3cf45b" name="Changes" comment="frontend-up" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -233,8 +115,23 @@
       <workItem from="1739366321982" duration="183000" />
       <workItem from="1739369260672" duration="4177000" />
       <workItem from="1739375824561" duration="1036000" />
-      <workItem from="1739376901873" duration="2023000" />
+      <workItem from="1739376901873" duration="2366000" />
     </task>
+    <task id="LOCAL-00001" summary="frontend-up">
+      <created>1739379501343</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1739379501343</updated>
+    </task>
+    <task id="LOCAL-00002" summary="frontend-up">
+      <created>1739379700841</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1739379700841</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -250,5 +147,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="frontend-up" />
+    <option name="LAST_COMMIT_MESSAGE" value="frontend-up" />
   </component>
 </project>
