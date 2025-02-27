@@ -1,0 +1,196 @@
+<div class="content-wrapper container-xl">
+    <div class="content-body">
+        <!-- User List -->
+        <section class="users-list-wrapper">
+            <!-- users filter start -->
+
+            <div *ngIf="false" class="card">
+                <h5 class="card-header">Filtre de recherche</h5>
+                <div class="card-body">
+                    <div class="users-list-filter">
+                        <form>
+                            <div class="row">
+                                <div class="col-12 col-md-4">
+                                    <fieldset class="form-group">
+                                        <ng-select
+                                                [items]="selectRole"
+                                                [(ngModel)]="selectedRole"
+                                                name="selectedRole"
+                                                bindLabel="name"
+                                                placeholder="Select Role"
+                                                (change)="filterByRole($event)">
+                                        </ng-select>
+                                    </fieldset>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <fieldset class="form-group">
+                                        <ng-select
+                                                [items]="selectPlan"
+                                                [(ngModel)]="selectedPlan"
+                                                name="selectedPlan"
+                                                bindLabel="name"
+                                                placeholder="Select Plan"
+                                                (change)="filterByPlan($event)">
+                                        </ng-select>
+                                    </fieldset>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <fieldset class="form-group">
+                                        <ng-select
+                                                [items]="selectStatus"
+                                                [(ngModel)]="selectedStatus"
+                                                name="selectedStatus"
+                                                bindLabel="name"
+                                                placeholder="Select Status"
+                                                (change)="filterByStatus($event)">
+                                        </ng-select>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- users filter end -->
+
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <div class="d-flex justify-content-between align-items-center m-1">
+                            <label class="d-flex align-items-center">Afficher
+                                <select class="form-control mx-25"
+                                        [(ngModel)]="selectedOption">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                lignes</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-12 d-flex justify-content-start justify-content-md-end">
+                        <div class="d-flex align-items-center justify-content-end pr-1 pb-1 pb-md-0">
+                            <label class="d-flex align-items-center ml-1 ml-md-0">
+                                Recherche:
+                                <input [(ngModel)]="searchValue" name="searchValue"
+                                    type="search"
+                                    class="form-control ml-25"
+                                    (keyup)="filterUpdate($event)"/>
+                            </label>
+                            <button class="btn btn-primary ml-1" rippleEffect
+                                    (click)="onAddUser()">
+                                <i data-feather="plus" class="d-sm-none d-inline-block mr-0 mr-sm-1"></i>
+                                <span class="d-none d-sm-inline-block">Ajouter un nouvel utilisateur</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <ngx-datatable [rows]="rows"
+                               [rowHeight]="50"
+                               class="bootstrap core-bootstrap"
+                               [limit]="selectedOption"
+                               [columnMode]="ColumnMode.force"
+                               [headerHeight]="50"
+                               [footerHeight]="50"
+                               [scrollbarH]="true">
+                    <ngx-datatable-column name="Utilisateur" prop="fullName" [width]="200">
+                        <ng-template let-row="row" let-fullName="value" ngx-datatable-cell-template>
+                            <div class="d-flex align-items-center">
+                                <div *ngIf="row.avatar.length > 0; else customAvatar">
+                                    <img class="rounded-circle mr-1"
+                                            src="assets/images/portrait/small/{{ row.avatar }}"
+                                            height="32"
+                                            width="32"
+                                            alt="datatable-avatar"/>
+                                </div>
+                                <ng-template #customAvatar>
+                                    <div class="avatar mr-1 ml-0"
+                                         [ngClass]="{ 'bg-light-success': row.status == 'active',
+                                     'bg-light-secondary': row.status == 'inactive',
+                                     'bg-light-warning': row.status == 'pending'}">
+                                        <div class="avatar-content">{{ fullName | initials }}</div>
+                                    </div>
+                                </ng-template>
+
+                                <div class="cell-line-height">
+                                    <a routerLink="/projets/users/edit/{{ row.id }}" class="font-medium-1 d-block">
+                                        <span class="font-weight-bold">{{ row.firstName }} {{ row.lastName }}</span></a>
+                                    <span class="text-muted font-small-2">
+                                        @{{ row.username }}
+                                    </span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Email" prop="email" [width]="200"></ngx-datatable-column>
+                    <ngx-datatable-column name="Role" prop="role" [width]="100">
+                        <ng-template let-role="value" ngx-datatable-cell-template>
+                            <div>
+                                <i class="feather font-medium-3"
+                                   [ngClass]="{
+                                                'icon-layers text-danger': role==Role.ADMIN,
+                                                'icon-settings text-success': role ==Role.CAISSIER || role == Role.RESP_ST ,
+                                                'icon-check text-info': role == Role.DAF || role == Role.DGA||role == Role.RESP_METREE
+                                                                            || role == Role.CDG ||role == Role.CHEF_ZONE,
+                                                'icon-edit-2 text-warning': role == Role.COND_CH || role == Role.TECH_CH
+                                                                            || role == Role.CHEF_CH || role == Role.COMPT_CH ,
+                                                'icon-eye text-primary': role == Role.PDG}"></i>
+                                {{ role }}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Status" prop="accountNonLocked" [width]="50">
+                        <ng-template let-accountNonLocked="value" ngx-datatable-cell-template>
+                            <div class="badge badge-pill"
+                                 [ngClass]="{
+                                              'badge-light-success': accountNonLocked == 1,
+                                              'badge-light-danger': accountNonLocked == 0}">
+                                {{ accountNonLocked == 1?'Activé':'Desactivé' }}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Actions" [width]="40" [sortable]="false">
+                        <ng-template ngx-datatable-cell-template let-row="row">
+                            <div ngbDropdown container="body">
+                                <button ngbDropdownToggle type="button" class="btn icon-btn btn-sm hide-arrow"
+                                        rippleEffect>
+                                    <span [data-feather]="'more-vertical'" [class]="'cursor-pointer'"></span>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <!--<a routerLink="/apps/user/user-view/{{ row.id }}" ngbDropdownItem>
+                                        <span [data-feather]="'file-text'" [size]="16" [class]="'mr-50'"></span>
+                                        Details
+                                    </a>-->
+
+                                    <a routerLink="/projets/users/edit/{{ row.id }}" ngbDropdownItem>
+                                        <span [data-feather]="'edit'"  [class]="'mr-50'"></span>
+                                        Edit
+                                    </a>
+
+                                  <!--  <a href="javascript:;" ngbDropdownItem>
+                                        <span [data-feather]="'trash'" [size]="16" [class]="'mr-50'"></span>
+                                        Delete
+                                    </a>-->
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+        </section>
+        <!--/ User List -->
+    </div>
+
+    <!-- New User Sidebar -->
+    <!--<core-sidebar
+            class="modal modal-slide-in sidebar-todo-modal fade"
+            name="new-user-sidebar"
+            overlayClass="modal-backdrop">
+        <app-new-user-sidebar></app-new-user-sidebar>
+    </core-sidebar>-->
+    <!--/ New User Sidebar -->
+</div>
