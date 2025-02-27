@@ -1,6 +1,0 @@
-export enum MotifReglement {
-    AVANCE= 'AVANCE',
-    ATTACHEMENT= 'ATTACHEMENT',
-    HISTORIQUE= 'HISTORIQUE',
-    ENGAGEMENT= 'ENGAGEMENT',
-}

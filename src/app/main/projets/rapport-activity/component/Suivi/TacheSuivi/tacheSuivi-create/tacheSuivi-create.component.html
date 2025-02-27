@@ -1,0 +1,264 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modalTitle"><i class="bi bi-tasks me-2"></i>Créer un Suivi de Tâche</h4>
+        <button type="button" class="btn-close" (click)="activeModal.dismiss('cancel')" aria-label="Close" aria-describedby="modalTitle">
+            <span aria-hidden="true"><i class="bi bi-x"></i></span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <!-- Warning for Completed Task -->
+        <div class="alert alert-warning d-flex align-items-center" *ngIf="isTacheTermine" role="alert">
+            <i class="bi bi-exclamation-circle-fill me-2"></i>
+            <div><strong>Attention :</strong> Cette tâche est terminée. Vous ne pouvez pas modifier ou ajouter de suivis.</div>
+        </div>
+
+        <!-- Navigation Steps -->
+        <ul class="nav nav-tabs steps" [class.disabled]="isTacheTermine" role="tablist">
+            <li *ngFor="let step of steps; let i = index" class="nav-item" role="tab" [class.active]="currentSection === i + 1" (click)="goToSection(i + 1)">
+                <a class="nav-link" [class.active]="currentSection === i + 1" [attr.aria-selected]="currentSection === i + 1">
+                    <i class="{{ step.icon }} me-2"></i>{{ step.description }}
+                </a>
+            </li>
+        </ul>
+
+        <!-- Lots & Articles Section -->
+        <div class="tab-content form-section mt-3" *ngIf="currentSection === 1" role="tabpanel" aria-labelledby="lots-tab">
+            <h5 class="mb-3"><i class="bi bi-boxes me-2"></i>Lots & Articles</h5>
+            <div *ngFor="let lot of tacheSuivi.lotsSuivi; let lotIndex = index" class="lot-section mb-4 border rounded p-3">
+                <!-- Lot Selection -->
+                <div class="mb-3">
+                    <label for="lot-{{lotIndex}}" class="form-label"><i class="bi bi-box-fill me-2"></i>Nom du Lot</label>
+                    <div class="card-container row g-2" *ngIf="!lot.nomLotSuivi">
+                        <div class="col-auto" *ngFor="let option of getAvailableLots()">
+                            <div class="card p-2" (click)="selectLot(lotIndex, option)" [class.disabled]="isTacheTermine" role="button" aria-disabled="{{isTacheTermine}}">
+                                <i class="bi bi-box-fill me-2"></i>{{ option }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="selected-card p-2 bg-light border" *ngIf="lot.nomLotSuivi">
+                        <i class="bi bi-box-fill me-2"></i>{{ lot.nomLotSuivi }}
+                    </div>
+                </div>
+
+                <!-- Articles -->
+                <div *ngFor="let article of lot.articlesSuivi; let articleIndex = index" class="article-section mb-3 border rounded p-3">
+                    <div class="mb-3">
+                        <label for="article-{{lotIndex}}-{{articleIndex}}" class="form-label"><i class="bi bi-tags-fill me-2"></i>Article</label>
+                        <div class="card-container row g-2" *ngIf="!article.nomArticleSuivi">
+                            <div class="col-auto" *ngFor="let articleOption of getAvailableArticles(lot.nomLotSuivi)">
+                                <div class="card p-2" (click)="selectArticle(lotIndex, articleIndex, articleOption)" [class.disabled]="isTacheTermine" role="button" aria-disabled="{{isTacheTermine}}">
+                                    <i class="bi bi-tags-fill me-2"></i>{{ articleOption.name }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="selected-card p-3 bg-light border" *ngIf="article.nomArticleSuivi">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <p class="mb-0"><i class="bi bi-tags-fill me-2"></i>{{ article.nomArticleSuivi }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label"><i class="bi bi-boxes me-2"></i>Quantité Totale</label>
+                                    <input type="number" class="form-control" [value]="getArticleField(lot.nomLotSuivi, article.nomArticleSuivi, 'quantiteArticle')" disabled aria-readonly="true">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label"><i class="bi bi-calculator-fill me-2"></i>Quantité Consommée Totale</label>
+                                    <input type="number" class="form-control" [value]="getArticleField(lot.nomLotSuivi, article.nomArticleSuivi, 'quantiteArticleconsomme')" disabled aria-readonly="true">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label"><i class="bi bi-box-seam me-2"></i>Quantité Restante</label>
+                                    <input type="number" class="form-control" [value]="getArticleField(lot.nomLotSuivi, article.nomArticleSuivi, 'quantiteArticleRestant')" disabled aria-readonly="true">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="article-consomme-{{lotIndex}}-{{articleIndex}}" class="form-label"><i class="bi bi-calculator me-2"></i>Quantité Consommée (Suivi)</label>
+                                    <input type="number" id="article-consomme-{{lotIndex}}-{{articleIndex}}"
+                                           class="form-control"
+                                           [class.border-danger]="article.quantiteConsommeArticleSuivi > getArticleField(lot.nomLotSuivi, article.nomArticleSuivi, 'quantiteArticleRestant')"
+                                           [(ngModel)]="article.quantiteConsommeArticleSuivi"
+                                           min="0"
+                                           (ngModelChange)="onQuantiteConsommeChange(lotIndex, articleIndex)"
+                                           [disabled]="isTacheTermine"
+                                           aria-disabled="{{isTacheTermine}}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="article-realisee-{{lotIndex}}-{{articleIndex}}" class="form-label"><i class="bi bi-check-circle me-2"></i>Quantité Réalisée Cette Semaine</label>
+                                    <input type="number" id="article-realisee-{{lotIndex}}-{{articleIndex}}"
+                                           class="form-control"
+                                           [value]="article.quantiteRealiseeCetteSemaine"
+                                           disabled
+                                           aria-readonly="true">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="article-unite-{{lotIndex}}-{{articleIndex}}" class="form-label"><i class="bi bi-ruler me-2"></i>Unité</label>
+                                    <input type="text" id="article-unite-{{lotIndex}}-{{articleIndex}}" class="form-control" [(ngModel)]="article.uniteArticleSuivi" disabled aria-readonly="true">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="article-duree-{{lotIndex}}-{{articleIndex}}" class="form-label"><i class="bi bi-clock-fill me-2"></i>Durée (jours)</label>
+                                    <input type="number" id="article-duree-{{lotIndex}}-{{articleIndex}}" class="form-control" [(ngModel)]="article.dureeArticleSuivi" min="0" [disabled]="isTacheTermine" aria-disabled="{{isTacheTermine}}">
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-danger btn-sm" (click)="removeArticle(lotIndex, articleIndex)" [disabled]="isTacheTermine" aria-disabled="{{isTacheTermine}}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Lot Actions -->
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-primary btn-sm" (click)="addArticle(lotIndex)" [disabled]="isTacheTermine || !lot.nomLotSuivi" aria-disabled="{{isTacheTermine || !lot.nomLotSuivi}}">
+                        <i class="bi bi-plus-circle me-2"></i>Ajouter Article
+                    </button>
+                    <button class="btn btn-outline-danger btn-sm" (click)="removeLot(lotIndex)" *ngIf="tacheSuivi.lotsSuivi.length > 1" [disabled]="isTacheTermine" aria-disabled="{{isTacheTermine}}">
+                        <i class="bi bi-trash me-2"></i>Supprimer Lot
+                    </button>
+                </div>
+            </div>
+
+            <!-- Add Lot Button -->
+            <button class="btn btn-outline-primary mb-3" (click)="addLot()" [disabled]="isTacheTermine" aria-disabled="{{isTacheTermine}}">
+                <i class="bi bi-plus-circle me-2"></i>Ajouter Lot
+            </button>
+
+            <!-- Navigation -->
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-primary" (click)="validateSection(1)" [disabled]="isTacheTermine" aria-disabled="{{isTacheTermine}}">
+                    <i class="bi bi-arrow-right-circle me-2"></i>Suivant
+                </button>
+            </div>
+        </div>
+
+        <!-- Main d'Œuvre Section -->
+        <div class="tab-content form-section mt-3" *ngIf="currentSection === 2" role="tabpanel" aria-labelledby="mo-tab">
+            <h5 class="mb-3"><i class="bi bi-person-gear me-2"></i>Main d'Œuvre</h5>
+            <div *ngFor="let mo of tacheSuivi.mainOeuvresSuivi; let moIndex = index" class="mo-section mb-3 border rounded p-3">
+                <div class="mb-3">
+                    <label for="mo-{{moIndex}}" class="form-label"><i class="bi bi-person-badge-fill me-2"></i>Fonction</label>
+                    <div class="card-container row g-2" *ngIf="!mo.fonctionMOSuivi">
+                        <div class="col-auto" *ngFor="let option of getAvailableMainOeuvres()">
+                            <div class="card p-2" (click)="selectMainOeuvre(moIndex, option)" [class.disabled]="isTacheTermine" role="button" aria-disabled="{{isTacheTermine}}">
+                                <i class="bi bi-person-badge-fill me-2"></i>{{ option }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="selected-card p-3 Bg-light border" *ngIf="mo.fonctionMOSuivi">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <p class="mb-0"><i class="bi bi-person-badge-fill me-2"></i>{{ mo.fonctionMOSuivi }}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="bi bi-people-fill me-2"></i>Nombre Total</label>
+                                <input type="number" class="form-control" [value]="getMainOeuvreField(mo.fonctionMOSuivi, 'nbrMO')" disabled aria-readonly="true">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="bi bi-calculator-fill me-2"></i>Nombre Consommé Total</label>
+                                <input type="number" class="form-control" [value]="getMainOeuvreField(mo.fonctionMOSuivi, 'nbrMOConsomme')" disabled aria-readonly="true">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="bi bi-person-check-fill me-2"></i>Nombre Restant</label>
+                                <input type="number" class="form-control" [value]="getMainOeuvreField(mo.fonctionMOSuivi, 'nbrMORestant')" disabled aria-readonly="true">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="mo-nbr-{{moIndex}}" class="form-label"><i class="bi bi-people me-2"></i>Nombre Consommé (Suivi)</label>
+                                <input type="number" id="mo-nbr-{{moIndex}}"
+                                       class="form-control"
+                                       [class.border-danger]="mo.nbrMOSuivi > getMainOeuvreField(mo.fonctionMOSuivi, 'nbrMORestant')"
+                                       [(ngModel)]="mo.nbrMOSuivi"
+                                       min="1"
+                                       [disabled]="isTacheTermine"
+                                       aria-disabled="{{isTacheTermine}}">
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-danger btn-sm" (click)="removeMainOeuvre(moIndex)" [disabled]="isTacheTermine" aria-disabled="{{isTacheTermine}}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Main d'Œuvre Button -->
+            <button class="btn btn-outline-primary mb-3" (click)="addMainOeuvre()" [disabled]="isTacheTermine" aria-disabled="{{isTacheTermine}}">
+                <i class="bi bi-plus-circle me-2"></i>Ajouter Main d'Œuvre
+            </button>
+
+            <!-- Navigation -->
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-primary" (click)="goToSection(1)" [disabled]="isTacheTermine" aria-disabled="{{isTacheTermine}}">
+                    <i class="bi bi-arrow-left-circle me-2"></i>Précédent
+                </button>
+                <button class="btn btn-primary" (click)="validateSection(2)" [disabled]="isTacheTermine" aria-disabled="{{isTacheTermine}}">
+                    <i class="bi bi-arrow-right-circle me-2"></i>Suivant
+                </button>
+            </div>
+        </div>
+
+        <!-- Engins Section -->
+        <div class="tab-content form-section mt-3" *ngIf="currentSection === 3" role="tabpanel" aria-labelledby="engins-tab">
+            <h5 class="mb-3"><i class="bi bi-truck me-2"></i>Engins</h5>
+            <div *ngFor="let engin of tacheSuivi.enginsSuivi; let enginIndex = index" class="engin-section mb-3 border rounded p-3">
+                <div class="mb-3">
+                    <label for="engin-{{enginIndex}}" class="form-label"><i class="bi bi-gear-fill me-2"></i>Type d'Engin</label>
+                    <div class="card-container row g-2" *ngIf="!engin.typeEnginSuivi">
+                        <div class="col-auto" *ngFor="let option of getAvailableEngins()">
+                            <div class="card p-2" (click)="selectEngin(enginIndex, option)" [class.disabled]="isTacheTermine" role="button" aria-disabled="{{isTacheTermine}}">
+                                <i class="bi bi-gear-fill me-2"></i>{{ option }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="selected-card p-3 bg-light border" *ngIf="engin.typeEnginSuivi">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <p class="mb-0"><i class="bi bi-gear-fill me-2"></i>{{ engin.typeEnginSuivi }}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="bi bi-cogs me-2"></i>Nombre Total</label>
+                                <input type="number" class="form-control" [value]="getEnginField(engin.typeEnginSuivi, 'nbrEngin')" disabled aria-readonly="true">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="bi bi-calculator-fill me-2"></i>Nombre Consommé Total</label>
+                                <input type="number" class="form-control" [value]="getEnginField(engin.typeEnginSuivi, 'nbrEnginConsomme')" disabled aria-readonly="true">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="bi bi-gear-wide-connected me-2"></i>Nombre Restant</label>
+                                <input type="number" class="form-control" [value]="getEnginField(engin.typeEnginSuivi, 'nbrEnginRestant')" disabled aria-readonly="true">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="engin-nbr-{{enginIndex}}" class="form-label"><i class="bi bi-cogs me-2"></i>Nombre Consommé (Suivi)</label>
+                                <input type="number" id="engin-nbr-{{enginIndex}}"
+                                       class="form-control"
+                                       [class.border-danger]="engin.nbrEnginSuivi > getEnginField(engin.typeEnginSuivi, 'nbrEnginRestant')"
+                                       [(ngModel)]="engin.nbrEnginSuivi"
+                                       min="1"
+                                       [disabled]="isTacheTermine"
+                                       aria-disabled="{{isTacheTermine}}">
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-danger btn-sm" (click)="removeEngin(enginIndex)" [disabled]="isTacheTermine" aria-disabled="{{isTacheTermine}}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Engin Button -->
+            <button class="btn btn-outline-primary mb-3" (click)="addEngin()" [disabled]="isTacheTermine" aria-disabled="{{isTacheTermine}}">
+                <i class="bi bi-plus-circle me-2"></i>Ajouter Engin
+            </button>
+
+            <!-- Navigation -->
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-primary" (click)="goToSection(2)" [disabled]="isTacheTermine" aria-disabled="{{isTacheTermine}}">
+                    <i class="bi bi-arrow-left-circle me-2"></i>Précédent
+                </button>
+                <button class="btn btn-success" (click)="submitForm()" [disabled]="!isFormValid() || isLoading" aria-disabled="{{!isFormValid() || isLoading}}">
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    <i class="bi bi-floppy me-2"></i>{{ isLoading ? 'Enregistrement...' : 'Enregistrer' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

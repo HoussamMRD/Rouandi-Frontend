@@ -8,7 +8,7 @@ import {AuthService} from '../../../authentication/auth.service';
 import {takeUntil} from 'rxjs/operators';
 import {AppRole} from '../../../authentication/models/app-role';
 import {NgForm} from '@angular/forms';
-import {Param} from '../../../parametres/models/param';
+
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FileUploader} from 'ng2-file-upload';
 import {UpdateInfosUserDTO} from '../../../authentication/models/update-infos-userDTO';
@@ -227,18 +227,18 @@ export class UserEditComponent implements OnInit, OnDestroy {
         });
     }
 
-    onSaveNewRole(modal: any) {
-        const appRole: AppRole = new AppRole(this.roleName, TypeRole.ADMINISTARTION);
-
-        this._roleListService.createRole(appRole).subscribe(
-            (data: Param) => {
-                this._roleListService.getAppRoles();
-                modal.close('Accept click');
-
-            }
-        );
-
-    }
+    // onSaveNewRole(modal: any) {
+    //     const appRole: AppRole = new AppRole(this.roleName, TypeRole.ADMINISTARTION);
+    //
+    //     this._roleListService.createRole(appRole).subscribe(
+    //         (data: Param) => {
+    //             this._roleListService.getAppRoles();
+    //             modal.close('Accept click');
+    //
+    //         }
+    //     );
+    //
+    // }
 
     updateInfosGenerales() {
         const roles: string[] = [];
@@ -257,11 +257,11 @@ export class UserEditComponent implements OnInit, OnDestroy {
             this.userEditter.credentialsNonExpired
         );
 
-        this._accountSettingsService.updateInfoUser(updateInfoUserDto).subscribe(
-            (data: Param) => {
-                this.showSwal('basic', 'success', 'Good job!', 'Infos utilisateur modifiées avec succés', 'btn btn-primary');
-            }
-        );
+        // this._accountSettingsService.updateInfoUser(updateInfoUserDto).subscribe(
+        //     (data: Param) => {
+        //         this.showSwal('basic', 'success', 'Good job!', 'Infos utilisateur modifiées avec succés', 'btn btn-primary');
+        //     }
+        // );
     }
 
 

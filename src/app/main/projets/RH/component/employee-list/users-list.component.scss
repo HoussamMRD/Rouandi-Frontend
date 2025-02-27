@@ -1,3 +1,23 @@
-@import '../../../../../../@core/scss/angular/libs/datatables.component.scss';
-@import '../../../../../../@core/scss/base/pages/app-user.scss';
-@import '../../../../../../@core/scss/angular/libs/select.component.scss';
+@import '../../../../../../@core/scss/angular/libs/datatables.component';
+@import '../../../../../../@core/scss/base/pages/app-user';
+@import '../../../../../../@core/scss/angular/libs/select.component';
+
+.ngx-datatable.bootstrap .datatable-header {
+  background-color: rgba(150, 20, 45, 0.86) !important;
+  color: white !important;
+}
+#closePup {
+  background-color: rgba(150, 20, 45, 1);
+  color: #fffdfd;
+  margin-right: 1px;
+}
+.editbtn {
+  margin-top: 10px;
+}
+
+app-form-wizard {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+}
+

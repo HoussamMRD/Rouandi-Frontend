@@ -13,15 +13,11 @@ import {ContentHeaderModule} from '../../layout/components/content-header/conten
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {DatePickerI18nModule} from '../forms/form-elements/date-time-picker/date-picker-i18n/date-picker-i18n.module';
 import {AuthGuard} from '../authentication/auth.guards';
+import {NgChartsModule} from 'ng2-charts';
 
 // routing
 const routes: Routes = [
 
-    {
-        path: 'users',
-        loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
-        canActivate:[AuthGuard]
-    },
 
 
 
@@ -41,6 +37,14 @@ const routes: Routes = [
         canActivate: [AuthGuard]
     },
 
+    {
+        path: 'rapport-activity',
+        loadChildren: () => import('./rapport-activity/rapport-activity.module').then(m => m.RapportActivityModule),
+        canActivate: [AuthGuard]
+    },
+
+
+
 ];
 
 FullCalendarModule.registerPlugins([dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]);
@@ -57,7 +61,8 @@ FullCalendarModule.registerPlugins([dayGridPlugin, timeGridPlugin, listPlugin, i
         ContentHeaderModule,
         FormsModule,
         NgxDatatableModule,
-        DatePickerI18nModule
+        DatePickerI18nModule ,
+        NgChartsModule ,
     ],
     providers: [],
     exports: []

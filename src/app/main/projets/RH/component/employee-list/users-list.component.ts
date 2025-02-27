@@ -1,14 +1,12 @@
 import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
-import {Subject, Subscription} from 'rxjs';
-import {UsersListService} from './users-list.service';
-import {CoreSidebarService} from '@core/components/core-sidebar/core-sidebar.service';
-import {CoreConfigService} from '@core/services/config.service';
-import {takeUntil} from 'rxjs/operators';
-import {ColumnMode, DatatableComponent} from '@swimlane/ngx-datatable';
-import {AuthService} from '../../../../authentication/auth.service';
-import {AppUser} from '../../../../authentication/models/app-user';
-import {Role} from '../../../../authentication/models/role';
-import {Router} from '@angular/router';
+
+import {Employee} from '../../models/employe';
+import {environment} from '../../../../../../environments/environment';
+import {SrManagerService} from '../../../sr-manager.service';
+import {EmployeFilter} from '../../../../../../@core/enum/EmployeFilter';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {EmployeesService} from '../../services/employees.service';
+
 
 @Component({
     selector: 'app-users-list',
@@ -17,209 +15,211 @@ import {Router} from '@angular/router';
     encapsulation: ViewEncapsulation.None
 })
 export class UsersListComponent implements OnInit {
-    readonly  Role = Role;
 
-
-    // Public
-    public sidebarToggleRef = false;
-    public rows: AppUser[] = [];
-    public selectedOption = 10;
-    public ColumnMode = ColumnMode;
-    public temp: AppUser[] = [];
-    public previousRoleFilter = '';
-    public previousPlanFilter = '';
-    public previousStatusFilter = '';
-
-    public selectRole: any = [
-        {name: 'All', value: ''},
-        {name: 'Admin', value: 'Admin'},
-        {name: 'Author', value: 'Author'},
-        {name: 'Editor', value: 'Editor'},
-        {name: 'Maintainer', value: 'Maintainer'},
-        {name: 'Subscriber', value: 'Subscriber'}
-    ];
-
-    public selectPlan: any = [
-        {name: 'All', value: ''},
-        {name: 'Basic', value: 'Basic'},
-        {name: 'Company', value: 'Company'},
-        {name: 'Enterprise', value: 'Enterprise'},
-        {name: 'Team', value: 'Team'}
-    ];
-
-    public selectStatus: any = [
-        {name: 'All', value: ''},
-        {name: 'Pending', value: 'Pending'},
-        {name: 'Active', value: 'Active'},
-        {name: 'Inactive', value: 'Inactive'}
-    ];
-
-    public selectedRole = [];
-    public selectedPlan = [];
-    public selectedStatus = [];
-    public searchValue = '';
-
-    // Decorator
-    @ViewChild(DatatableComponent) table: DatatableComponent;
-
-    // Private
-    private tempData = [];
-    private _unsubscribeAll: Subject<any>;
-    private currentUserSubscription: Subscription;
-    public accountUser: AppUser;
-    /**
-     * Constructor
-     *
-     * @param {CoreConfigService} _coreConfigService
-     * @param {UserListService} _userListService
-     * @param {CoreSidebarService} _coreSidebarService
-     */
-    constructor(public authService: AuthService, private router: Router,
-        private _userListService: UsersListService,
-        private _coreSidebarService: CoreSidebarService,
-        private _coreConfigService: CoreConfigService
-    ) {
-        this._unsubscribeAll = new Subject();
-        this.currentUserSubscription = this.authService.currentUserSubject.subscribe(
-            (data: AppUser) => {
-                this.accountUser = data;
-            }
-        );
-        authService.loadCurrentUser();
+    constructor(private srManagerService: SrManagerService,
+                private modalService: NgbModal,
+                private employeService: EmployeesService,
+                ) {
     }
 
-    // Public Methods
-    // -----------------------------------------------------------------------------------------------------
+    employeList: Employee[];
+    @ViewChild('tableRowDetails') tableRowDetails: any;
+    filteredList: Employee[] = [];
+    employeFilters = Object.values(EmployeFilter);
+    departements: String[] = [];
+    postes: String[] = [];
+    soceites: String[] = [];
+    employesByDept: Employee[];
+    employesByPoste: Employee[];
+    employesBySociete: Employee[];
+    selectedFilter: String = '';
+    updatedEmploye: Employee;
 
-    /**
-     * filterUpdate
-     *
-     * @param event
-     */
-    filterUpdate(event) {
+    filterCriteria = {
+        matricule: '',
+        nom: '',
+        departement: '',
+        poste: '',
+        societe: ''
+    };
+    filterCriteriaEdit = {
+        matricule: '',
+        nom: '',
+        departement: '',
+        poste: '',
+        societe: ''
+    };
+    selectedEmploye: Employee;
 
-        const val = event.target.value.toLowerCase();
+    pageSize = 10;  // Define the number of rows per page
+    pageOffset = 0; // Define the starting offset
 
-        // Filter Our Data
-        const temp = this.tempData.filter(function (d) {
-            return d.firstName?.toLowerCase().indexOf(val) !== -1
-                || d.lastName?.toLowerCase().indexOf(val) !== -1 || !val
-                || d.fullName?.toLowerCase().indexOf(val) !== -1 || !val;
-        });
 
-        // Update The Rows
-        this.rows = temp;
-        // Whenever The Filter Changes, Always Go Back To The First Page
-        this.table.offset = 0;
+
+    getSelectedFilter() {
+        console.log('Filtre sélectionné :', this.selectedFilter);
+    }
+    rowDetailsToggleExpand(row) {
+        this.tableRowDetails.rowDetail.toggleExpandRow(row);
+    }
+    onPageChange(event: any): void {
+        this.pageOffset = event.offset;
     }
 
-    /**
-     * Toggle the sidebar
-     *
-     * @param name
-     */
-    toggleSidebar(name): void {
-        this._coreSidebarService.getSidebarRegistry(name).toggleOpen();
+
+
+
+
+    getEmployees() {
+        // return new Promise((resolve, reject) => {
+        //     this.srManagerService.getResources(environment.employees + '/getAllEmployees').subscribe(
+        //         (response: any) => {
+        //             this.employeList = response;
+        //             this.filteredList = response;
+        //
+        //         }, reject);
+        // });
+        this.employeList = [];
+    }
+    getFilters() {
+        this.filterCriteria.poste = '';
+        this.filterCriteria.departement = '';
+        this.filterCriteria.societe = '';
+        if (this.selectedFilter === 'DEPARTEMENT' || this.selectedFilter === 'POSTE' || this.selectedFilter === 'SOCIETE') {
+            setTimeout(() => this.getEmployesFiltrer(), 100);
+        }
+
     }
 
-    /**
-     * Filter By Roles
-     *
-     * @param event
-     */
-    filterByRole(event) {
-        const filter = event ? event.value : '';
-        this.previousRoleFilter = filter;
-        this.temp = this.filterRows(filter, this.previousPlanFilter, this.previousStatusFilter);
-        this.rows = this.temp;
+    getDeptList(): Promise<any[]> {
+        return new Promise((resolve, reject) => {
+                this.srManagerService.getResources(environment.departements + '/getNames').subscribe(
+                    (response: any) => {
+                        this.departements = response;
+                    }, reject);
+            });
     }
 
-    /**
-     * Filter By Plan
-     *
-     * @param event
-     */
-    filterByPlan(event) {
-        const filter = event ? event.value : '';
-        this.previousPlanFilter = filter;
-        this.temp = this.filterRows(this.previousRoleFilter, filter, this.previousStatusFilter);
-        this.rows = this.temp;
-    }
-
-    /**
-     * Filter By Status
-     *
-     * @param event
-     */
-    filterByStatus(event) {
-        const filter = event ? event.value : '';
-        this.previousStatusFilter = filter;
-        this.temp = this.filterRows(this.previousRoleFilter, this.previousPlanFilter, filter);
-        this.rows = this.temp;
-    }
-
-    /**
-     * Filter Rows
-     *
-     * @param roleFilter
-     * @param planFilter
-     * @param statusFilter
-     */
-    filterRows(roleFilter, planFilter, statusFilter): any[] {
-        // Reset search on select change
-        this.searchValue = '';
-
-        roleFilter = roleFilter.toLowerCase();
-        planFilter = planFilter.toLowerCase();
-        statusFilter = statusFilter.toLowerCase();
-
-        return this.tempData.filter(row => {
-            const isPartialNameMatch = row.role.toLowerCase().indexOf(roleFilter) !== -1 || !roleFilter;
-            const isPartialGenderMatch = row.currentPlan.toLowerCase().indexOf(planFilter) !== -1 || !planFilter;
-            const isPartialStatusMatch = row.status.toLowerCase().indexOf(statusFilter) !== -1 || !statusFilter;
-            return isPartialNameMatch && isPartialGenderMatch && isPartialStatusMatch;
+    getPostList(): Promise<any[]> {
+        return new Promise((resolve, reject) => {
+            this.srManagerService.getResources(environment.postes + '/getNames').subscribe(
+                (response: any) => {
+                    this.postes = response;
+                }, reject);
         });
     }
 
-    // Lifecycle Hooks
-    // -----------------------------------------------------------------------------------------------------
-    /**
-     * On init
-     */
+    getSocieteList(): Promise<any[]> {
+        return new Promise((resolve, reject) => {
+            this.srManagerService.getResources(environment.societe + '/getNames').subscribe(
+                (response: any) => {
+                    this.soceites = response;
+                    console.log(this.soceites);
+                }, reject);
+        });
+    }
+
+
     ngOnInit(): void {
-        // Subscribe config change
-        this._coreConfigService.config.pipe(takeUntil(this._unsubscribeAll)).subscribe(config => {
-            // ! If we have zoomIn route Transition then load datatable after 450ms(Transition will finish in 400ms)
-            if (config.layout.animation === 'zoomIn') {
-                setTimeout(() => {
-                    this._userListService.onAllUserListChanged.pipe(takeUntil(this._unsubscribeAll)).subscribe(
-                        response => {
-                            this.rows = response;
-                            this.tempData = this.rows;
-                            console.log(this.rows);
-                        });
-                }, 450);
-            } else {
-                this._userListService.onAllUserListChanged.pipe(takeUntil(this._unsubscribeAll)).subscribe(
-                    response => {
-                        this.rows = response;
-                        this.tempData = this.rows;
-                        console.log(this.rows);
-                    });
+        this.getEmployees();
+        this.getPostList();
+        this.getDeptList();
+        this.getSocieteList();
+    }
+
+    refreshListEmploye(){
+        return this.getEmployesFiltrer();
+    }
+
+    getEmployesFiltrer(): Promise<any[]> {
+        console.log('getEmployeFillter');
+        if (this.filterCriteria.departement !== '') {
+            return new Promise((resolve, reject) => {
+                this.srManagerService.getResources(environment.employees.query + '/getByDept/' + this.filterCriteria.departement).subscribe(
+                    (response: any) => {
+                        this.employesByDept = response;
+                        this.employeList = this.employesByDept;
+
+                    }, reject);
+            });
+        }
+        if (this.filterCriteria.poste !== '') {
+            return new Promise((resolve, reject) => {
+                this.srManagerService.getResources(environment.employees.query + '/getByPoste/' + this.filterCriteria.poste).subscribe(
+                    (response: any) => {
+                        this.employesByPoste = response;
+                        this.employeList = this.employesByPoste;
+
+                    }, reject);
+            });
+        }
+        if (this.filterCriteria.societe !== '') {
+            return new Promise((resolve, reject) => {
+                this.srManagerService.getResources(environment.employees.query + '/getBySociete/' + this.filterCriteria.societe).subscribe(
+                    (response: any) => {
+                        this.employesBySociete = response;
+                        this.employeList = this.employesBySociete;
+                        console.log(this.employeList);
+                    }, reject);
+            });
+        }
+        // if (this.filterCriteria.poste === '' && this.filterCriteria.departement === '') {
+        //     this.getEmployees();
+        // }
+
+
+
+
+    }
+
+    getByName() {
+        if (this.filterCriteria.nom.trim() !== '') {
+            if (this.selectedFilter === 'DEPARTEMENT') {
+                this.employeList = this.employesByDept;
             }
-        });
+            if (this.selectedFilter === 'POSTE') {
+                this.employeList = this.employesByPoste;
+            }
+            if (this.selectedFilter === 'SOCIETE') {
+                // this.employeList = this.employeBy
+            }
+            const searchName = this.filterCriteria.nom.toLowerCase().trim();
+            this.employeList = this.employeList.filter(item =>
+                item.nom.toLowerCase().includes(searchName)
+            );
+        } else {
+            this.getEmployesFiltrer();
+        }
+    }
+    getByMatricule() {
+        if (this.filterCriteria.matricule.trim() !== '') {
+            if (this.selectedFilter === 'DEPARTEMENT') {
+                this.employeList = this.employesByDept;
+            }
+            if (this.selectedFilter === 'POSTE') {
+                this.employeList = this.employesByPoste;
+            }
+            const searchMatricule = this.filterCriteria.matricule.toLowerCase().trim();
+
+            this.employeList = this.employeList.filter(item =>
+                item.matricule.toLowerCase().includes(searchMatricule)
+            );
+        } else {
+            this.getEmployesFiltrer();
+        }
     }
 
-    /**
-     * On destroy
-     */
-    ngOnDestroy(): void {
-        // Unsubscribe from all subscriptions
-        this._unsubscribeAll.next();
-        this._unsubscribeAll.complete();
+    openEditModal(row: any, content: any) {
+        this.selectedEmploye = {...row};
+        this.modalService.open(content, { size: 'xl', backdrop: 'static', centered: true  });
+
     }
 
-    onAddUser() {
-        this.router.navigate(['/projets/users/add']);
+    DeleteEmploye(id: number) {
+        this.employeService.DeleteEmploye(id).subscribe(
+            (response: any) => {
+                this.getEmployesFiltrer();
+            }
+        )
     }
 }

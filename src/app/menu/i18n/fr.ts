@@ -83,8 +83,15 @@ export const locale = {
             },
             RH: {
                 SECTION: 'RH',
-                COLLAPSIBLE: 'RH',
-                ADMIN: 'Administration',
+                ADMIN: {
+                    COLLAPSIBLE: 'Administration',
+                    EMPLOYEES: 'Employees',
+                    CONGE: 'Conge',
+                    ABSENCE: 'Absence',
+                },
+
+                FORMATION: 'Formations & Certificats',
+                POINTAGE: 'Pointage'
             },
             POINTAGE: {
                 SECTION: 'Pointage',

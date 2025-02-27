@@ -1,0 +1,231 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<div class="dashboard-container">
+    <div class="header">
+        <h1><i class="fas fa-chart-line"></i> Tableau de Bord</h1>
+        <div class="date-filter">
+            <span class="current-date">{{ currentDate }}</span>
+            <div class="filter-group">
+                <label for="affaire-filter">Filtrer par affaire :</label>
+                <select id="affaire-filter" [(ngModel)]="selectedAffaire" (change)="filterByAffaire($event.target.value)">
+                    <option *ngFor="let affaire of affaires" [value]="affaire">{{ affaire }}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-grid" *ngIf="!isLoading; else loading">
+        <div class="stat-card" [@countUp]>
+            <div class="card-header"><i class="fas fa-tasks"></i> Tâches Globales</div>
+            <div class="stat-value">{{ totalTachesGlobales }}</div>
+            <div class="stat-change" [ngClass]="{'positive': calculatePercentageChange(totalTachesGlobales, previousStats.totalTachesGlobales) >= 0, 'negative': calculatePercentageChange(totalTachesGlobales, previousStats.totalTachesGlobales) < 0}">
+                {{ formatPercentageChange(totalTachesGlobales, previousStats.totalTachesGlobales) }}%
+            </div>
+        </div>
+
+        <div class="stat-card" [@countUp]>
+            <div class="card-header"><i class="fas fa-check-circle"></i> Tâches Terminées</div>
+            <div class="stat-value">{{ completedTaches }}</div>
+            <div class="stat-change" [ngClass]="{'positive': calculatePercentageChange(completedTaches, previousStats.completedTaches) >= 0, 'negative': calculatePercentageChange(completedTaches, previousStats.completedTaches) < 0}">
+                {{ formatPercentageChange(completedTaches, previousStats.completedTaches) }}%
+            </div>
+        </div>
+
+        <div class="stat-card" [@countUp]>
+            <div class="card-header"><i class="fas fa-spinner"></i> Tâches en Cours</div>
+            <div class="stat-value">{{ enCoursTaches }}</div>
+            <div class="stat-change" [ngClass]="{'positive': calculatePercentageChange(enCoursTaches, previousStats.enCoursTaches) >= 0, 'negative': calculatePercentageChange(enCoursTaches, previousStats.enCoursTaches) < 0}">
+                {{ formatPercentageChange(enCoursTaches, previousStats.enCoursTaches) }}%
+            </div>
+        </div>
+
+        <div class="stat-card" [@countUp]>
+            <div class="card-header"><i class="fas fa-hourglass-start"></i> Tâches en Attente</div>
+            <div class="stat-value">{{ pendingTaches }}</div>
+            <div class="stat-change" [ngClass]="{'positive': calculatePercentageChange(pendingTaches, previousStats.pendingTaches) >= 0, 'negative': calculatePercentageChange(pendingTaches, previousStats.pendingTaches) < 0}">
+                {{ formatPercentageChange(pendingTaches, previousStats.pendingTaches) }}%
+            </div>
+        </div>
+
+        <div class="stat-card" [@countUp]>
+            <div class="card-header"><i class="fas fa-exclamation-triangle"></i> Tâches en Retard</div>
+            <div class="stat-value">{{ overdueTaches }}</div>
+            <div class="stat-change" [ngClass]="{'positive': calculatePercentageChange(overdueTaches, previousStats.overdueTaches) >= 0, 'negative': calculatePercentageChange(overdueTaches, previousStats.overdueTaches) < 0}">
+                {{ formatPercentageChange(overdueTaches, previousStats.overdueTaches) }}%
+            </div>
+        </div>
+
+        <div class="stat-card" [@countUp]>
+            <div class="card-header"><i class="fas fa-ban"></i> Tâches Annulées</div>
+            <div class="stat-value">{{ annuleTaches }}</div>
+            <div class="stat-change" [ngClass]="{'positive': calculatePercentageChange(annuleTaches, previousStats.annuleTaches) >= 0, 'negative': calculatePercentageChange(annuleTaches, previousStats.annuleTaches) < 0}">
+                {{ formatPercentageChange(annuleTaches, previousStats.annuleTaches) }}%
+            </div>
+        </div>
+
+        <div class="stat-card" [@countUp]>
+            <div class="card-header"><i class="fas fa-truck-monster"></i> Engins Utilisés</div>
+            <div class="stat-value">{{ resourceStats.engin.count }}</div>
+            <div class="stat-change" [ngClass]="{'positive': calculatePercentageChange(resourceStats.engin.count, previousStats.enginCount) >= 0, 'negative': calculatePercentageChange(resourceStats.engin.count, previousStats.enginCount) < 0}">
+                {{ formatPercentageChange(resourceStats.engin.count, previousStats.enginCount) }}%
+            </div>
+        </div>
+
+        <div class="stat-card" [@countUp]>
+            <div class="card-header"><i class="fas fa-hard-hat"></i> Main d'Œuvre Utilisés</div>
+            <div class="stat-value">{{ resourceStats.mainOeuvre.activeWorkers }}</div>
+            <div class="stat-change" [ngClass]="{'positive': calculatePercentageChange(resourceStats.mainOeuvre.activeWorkers, previousStats.mainOeuvreWorkers) >= 0, 'negative': calculatePercentageChange(resourceStats.mainOeuvre.activeWorkers, previousStats.mainOeuvreWorkers) < 0}">
+                {{ formatPercentageChange(resourceStats.mainOeuvre.activeWorkers, previousStats.mainOeuvreWorkers) }}%
+            </div>
+        </div>
+    </div>
+
+    <ng-template #loading>
+        <div class="loading"><i class="fas fa-spinner fa-spin"></i> Chargement des données...</div>
+    </ng-template>
+
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3><i class="fas fa-chart-bar"></i> Tâches par Mois</h3>
+            <canvas baseChart
+                    [data]="barChartData"
+                    [options]="barChartOptions"
+                    [plugins]="barChartPlugins"
+                    type="bar">
+            </canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3><i class="fas fa-chart-pie"></i> Utilisation des Ressources</h3>
+            <canvas baseChart
+                    [data]="donutChartData"
+                    [options]="donutChartOptions"
+                    [plugins]="donutChartPlugins"
+                    type="doughnut">
+            </canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3><i class="fas fa-chart-area"></i> Distribution par Affaire</h3>
+            <canvas baseChart
+                    [data]="radarChartData"
+                    [options]="radarChartOptions"
+                    [plugins]="radarChartPlugins"
+                    type="radar">
+            </canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3><i class="fas fa-tachometer-alt"></i> Pourcentage de Complétion</h3>
+            <canvas baseChart
+                    [data]="gaugeChartData"
+                    [options]="gaugeChartOptions"
+                    type="doughnut">
+            </canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3><i class="fas fa-chart-line"></i> Progression des Projets</h3>
+            <canvas baseChart
+                    [data]="lineChartData"
+                    [options]="lineChartOptions"
+                    [plugins]="lineChartPlugins"
+                    type="line">
+            </canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3><i class="fas fa-cogs"></i> Utilisation des Ressources (Temps)</h3>
+            <canvas baseChart
+                    [data]="resourceUtilizationChartData"
+                    [options]="resourceUtilizationChartOptions"
+                    [plugins]="resourceUtilizationChartPlugins"
+                    type="line">
+            </canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3><i class="fas fa-truck-monster"></i> Engins par Type</h3>
+            <canvas baseChart
+                    [data]="enginChartData"
+                    [options]="enginChartOptions"
+                    [plugins]="enginChartPlugins"
+                    type="bar">
+            </canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3><i class="fas fa-hard-hat"></i> Main d'Œuvre par Fonction</h3>
+            <canvas baseChart
+                    [data]="mainOeuvreChartData"
+                    [options]="mainOeuvreChartOptions"
+                    [plugins]="mainOeuvreChartPlugins"
+                    type="bar">
+            </canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3><i class="fas fa-boxes"></i> Articles par Quantite</h3>
+            <canvas baseChart
+                    [data]="articleChartData"
+                    [options]="articleChartOptions"
+                    [plugins]="articleChartPlugins"
+                    type="bar">
+            </canvas>
+        </div>
+    </div>
+
+    <div class="projects-progress">
+        <h2><i class="fas fa-project-diagram"></i> Progression des Projets</h2>
+        <div class="progress-grid">
+            <div class="progress-card" *ngFor="let project of projectsProgress" [style.background]="getGradient(project)">
+                <h4>{{ project.name }}</h4>
+                <div class="progress-bar">
+                    <div class="progress" [style.width.%]="project.percentage"></div>
+                </div>
+                <p>{{ project.percentage }}% Complété</p>
+                <p>{{ project.completedCount }} / {{ project.totalCount }} Tâches</p>
+                <p>Lots terminés : {{ project.lotCompletion }}%</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="recent-tasks">
+        <h2><i class="fas fa-tasks"></i> Tâches Récentes</h2>
+        <div class="filter-tabs">
+            <button [class.active]="currentFilter === 'Toutes'" (click)="filterTasks('Toutes')">Toutes</button>
+            <button [class.active]="currentFilter === 'Terminées'" (click)="filterTasks('Terminées')">Terminées</button>
+            <button [class.active]="currentFilter === 'En Cours'" (click)="filterTasks('En Cours')">En Cours</button>
+            <button [class.active]="currentFilter === 'En Attente'" (click)="filterTasks('En Attente')">En Attente</button>
+            <button [class.active]="currentFilter === 'En Retard'" (click)="filterTasks('En Retard')">En Retard</button>
+            <button [class.active]="currentFilter === 'Annulées'" (click)="filterTasks('Annulées')">Annulées</button>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>Activité</th>
+                <th>Affaire</th>
+                <th>Statut</th>
+                <th>Date Début</th>
+                <th>Date Fin</th>
+                <th>Progression</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let task of filteredTasks">
+                <td>{{ task.nomTache }}</td>
+                <td>{{ task.affaire?.nomAffaire || 'N/A' }}</td>
+                <td>{{ task.statut }}</td>
+                <td>{{ formatDate(task.dateDebut) }}</td>
+                <td>{{ formatDate(task.dateFin) }}</td>
+                <td>{{ task.percentAvancement || (task.statut === 'TERMINE' ? 100 : task.statut === 'EN_COURS' ? 50 : task.statut === 'EN_RETARD' ? 25 : 0) }}%</td>
+                <td>
+                    <button class="btn btn-sm btn-info" (click)="showDetails(task)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

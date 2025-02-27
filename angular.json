@@ -67,12 +67,14 @@
               "src/assets/fonts/feather/iconfont.css",
               "src/assets/fonts/font-awesome/css/font-awesome.min.css",
               "src/assets/fonts/flag-icon-css/css/flag-icon.min.css",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css" ,
+
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
                 "node_modules",
                 "src/assets/"
+
               ]
             },
             "scripts": [

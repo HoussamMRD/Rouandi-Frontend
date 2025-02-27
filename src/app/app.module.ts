@@ -31,6 +31,7 @@ import { TimeFormatPipe } from '@core/pipes/time-format.pipe';
 
 
 
+
 registerLocaleData(localeFr, 'fr');
 
 const appRoutes: Routes = [
@@ -68,6 +69,7 @@ const appRoutes: Routes = [
 @NgModule({
     declarations: [
         AppComponent,
+
     ],
     imports: [
         BrowserModule,

@@ -1,0 +1,189 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">Suivi des Tâches{{ nomTache }}</h1>
+        <p class="dashboard-subtitle">Tableau de bord de gestion et suivi des tâches</p>
+    </div>
+
+    <!-- Card Grid -->
+    <div class="card-grid" *ngIf="tacheSuivis.length > 0">
+        <div class="card-header">
+            <h2><i class="fas fa-list"></i> Liste des Suivis</h2>
+            <div class="header-actions">
+                <select class="week-filter" [(ngModel)]="selectedWeek" (change)="filterByWeek()">
+                    <option value="all">Toutes les Semaines</option>
+                    <option *ngFor="let week of weeks" [value]="week">Semaine {{ week }}</option>
+                </select>
+                <button class="btn btn-new-suivi" (click)="openTacheSuiviAddModal()">
+                    <i class="fas fa-circle-plus"></i> Nouveau Suivi
+                </button>
+            </div>
+        </div>
+
+        <div class="cards-container">
+            <div class="task-card" *ngFor="let row of filteredTacheSuivis; let rowIndex = index"
+                 [class.selected]="isRowSelected(row)"
+                 (click)="onSelect({ selected: [row] })">
+                <div class="card-inner">
+                    <!-- Front Face -->
+                    <div class="card-front">
+                        <div class="card-header">
+                            <h3 class="card-title">Semaine {{ selectedWeek !== 'all' ? selectedWeek : (pageOffset * pageSize) + rowIndex + 1 }}</h3>
+
+                            <div class="action-buttons">
+                                <button class="action-button edit" title="Modifier" (click)="openTacheSuiviEditModal(row); $event.stopPropagation()">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-button delete" (click)="deleteTacheSuivi(row.idTacheSuivi); $event.stopPropagation()"
+                                        title="Supprimer">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <!-- Lots & Articles -->
+                            <div class="section">
+                                <h4 class="section-title"><i class="fas fa-boxes"></i> Lots & Articles</h4>
+                                <div class="lot-item">
+                                    <h5 class="lot-title">{{ row.lotsSuivi[0]?.nomLotSuivi || 'N/A' }}</h5>
+                                    <ul class="article-list">
+                                        <li class="article-item"
+                                            *ngIf="row.lotsSuivi[0]?.articlesSuivi[0] as firstArticle">
+                                            <div class="article-name"><i class="fas fa-layer-group"></i> {{ firstArticle.nomArticleSuivi || 'N/A' }}</div>
+                                            <div class="article-meta">
+                                                <span class="meta-tag">
+                                                    <i class="fas fa-box"></i>Quantité Consommée:{{ firstArticle.quantiteRealiseeCetteSemaine || '0' }} {{ firstArticle.uniteArticleSuivi || '' }}
+                                                </span>
+                                                <span class="meta-tag">
+                                                    <i class="fas fa-clock"></i>Durée:{{ firstArticle.dureeArticleSuivi || '0' }} jours
+                                                </span>
+                                            </div>
+                                        </li>
+                                        <li class="article-item"
+                                            *ngIf="row.lotsSuivi[0]?.articlesSuivi?.length > 1">
+                                            <div class="article-more">
+                                                <i class="fas fa-ellipsis-h"></i> +{{ row.lotsSuivi[0]?.articlesSuivi.length - 1 }} autres articles
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Main d'Oeuvre -->
+                            <div class="section">
+                                <h4 class="section-title"><i class="fas fa-hard-hat"></i> Main d'Oeuvre</h4>
+                                <div class="resource-item">
+                                    <div class="resource-details">
+                                        <h5 class="resource-title">{{ row.mainOeuvresSuivi[0]?.fonctionMOSuivi || 'N/A' }}</h5>
+                                        <p class="resource-subtitle">
+                                            <i class="fas fa-users"></i> {{ row.mainOeuvresSuivi[0]?.nbrMOSuivi || '0' }}
+                                            <span *ngIf="row.mainOeuvresSuivi?.length > 1" class="resource-more">
+                                                (+{{ row.mainOeuvresSuivi.length - 1 }} autres)
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Engins -->
+                            <div class="section">
+                                <h4 class="section-title"><i class="fas fa-truck-monster"></i> Engins</h4>
+                                <div class="resource-item">
+                                    <div class="resource-details">
+                                        <h5 class="resource-title">{{ row.enginsSuivi[0]?.typeEnginSuivi || 'N/A' }}</h5>
+                                        <p class="resource-subtitle">
+                                            <i class="fas fa-cogs"></i> {{ row.enginsSuivi[0]?.nbrEnginSuivi || '0' }}
+                                            <span *ngIf="row.enginsSuivi?.length > 1" class="resource-more">
+                                                (+{{ row.enginsSuivi.length - 1 }} autres)
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-details">Voir Détails</button>
+                        </div>
+                    </div>
+
+                    <!-- Back Face (Expanded View) -->
+                    <div class="card-back">
+                        <div class="card-header">
+                            <h3 class="card-title">Semaine {{ (pageOffset * pageSize) + rowIndex + 1 }} - Détails</h3>
+                            <button class="btn btn-close" (click)="onSelect({ selected: [] }); $event.stopPropagation()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <!-- Lots & Articles Expanded -->
+                            <div class="section">
+                                <h4 class="section-title"><i class="fas fa-boxes"></i> Lots & Articles</h4>
+                                <div *ngFor="let lot of row.lotsSuivi" class="lot-item">
+                                    <h5 class="lot-title"><i class="fas fa-boxes"></i> {{ lot.nomLotSuivi }}</h5>
+                                    <ul class="article-list">
+                                        <li class="article-item" *ngFor="let article of lot.articlesSuivi">
+                                            <div class="article-name"><i class="fas fa-layer-group"></i> {{ article.nomArticleSuivi }}</div>
+                                            <div class="article-meta">
+                                                <span class="meta-tag">
+                                                    <i class="fas fa-box"></i> Quantité Consommée: {{ article.quantiteConsommeArticleSuivi }} {{ article.uniteArticleSuivi || '' }}
+                                                </span>
+                                                <span class="meta-tag">
+                                                    <i class="fas fa-clock"></i> Durée: {{ article.dureeArticleSuivi }} jours
+                                                </span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Main d'Oeuvre Expanded -->
+                            <div class="section">
+                                <h4 class="section-title"><i class="fas fa-hard-hat"></i> Main d'Oeuvre</h4>
+                                <div *ngFor="let mo of row.mainOeuvresSuivi" class="resource-item">
+                                    <div class="resource-details">
+                                        <h5 class="resource-title">{{ mo.fonctionMOSuivi }}</h5>
+                                        <p class="resource-subtitle"><i class="fas fa-users"></i> {{ mo.nbrMOSuivi }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Engins Expanded -->
+                            <div class="section">
+                                <h4 class="section-title"><i class="fas fa-truck-monster"></i> Engins</h4>
+                                <div *ngFor="let engin of row.enginsSuivi" class="resource-item">
+                                    <div class="resource-details">
+                                        <h5 class="resource-title">{{ engin.typeEnginSuivi }}</h5>
+                                        <p class="resource-subtitle"><i class="fas fa-cogs"></i> {{ engin.nbrEnginSuivi }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="card" *ngIf="!isLoading && tacheSuivis.length === 0">
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-tasks"></i>
+            </div>
+            <h3 class="empty-title">Aucun suivi trouvé</h3>
+            <p class="empty-message">Commencez à organiser vos tâches en créant un nouveau suivi dès maintenant.</p>
+            <button class="btn btn-new-suivi mt-4" (click)="openTacheSuiviAddModal()">
+                <i class="fas fa-circle-plus"></i> Créer un Suivi
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="card" *ngIf="isLoading">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+        </div>
+    </div>
+</div>
